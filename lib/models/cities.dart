@@ -186,11 +186,11 @@ final List<CitiesModel> listOfCities = [
       'https://i.postimg.cc/8PPwJrTn/istockphoto-913722282-612x612.jpg',
       'https://i.postimg.cc/0jZfX90f/istockphoto-903175876-612x612.jpg'
     ], 
-    category: 'ed57fe3b-67fc-4c8b-9600-2874fa209b55', 
-    country: 'Italy', 
+    category: 'ed57fe3b-67fc-4c8b-9600-2874fa209b55',
+    country: 'Italy',
     rating: 4,
     isPopular: true,
-    createdAt: DateTime.now(), 
+    createdAt: DateTime.now(),
     updatedAt: DateTime.now()
     ),
 ];

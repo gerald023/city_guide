@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:city_guide/provider/firebase_provider.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:city_guide/screens/city/screens/city_screen.dart';
 
 class AllCities extends ConsumerStatefulWidget {
   const AllCities({super.key});
@@ -23,7 +25,10 @@ class _AllCitiesState extends ConsumerState<AllCities> {
     fetchCities();
     fetchUserDetails();
   }
-
+  Future<void> _saveCityIdToPreference(cityId) async{
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('cityId', cityId);
+  }
   Future<void> fetchCities() async{
     final firebaseService = ref.read(firebaseServiceProvider);
     setState(() => _isLoading = true);
@@ -104,7 +109,10 @@ class _AllCitiesState extends ConsumerState<AllCities> {
                 child: CityCard(
                   city: city,
                   onPress: (){
-                    
+                    _saveCityIdToPreference(city.cityId);
+                    Get.to(
+                      CityScreen(cityId: city.cityId,)
+                    );
                   },
                 ),
               );

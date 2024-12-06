@@ -1,8 +1,10 @@
+import 'package:city_guide/admin/city/screen/create_city_screen.dart';
 import 'package:city_guide/firebase_options.dart';
 import 'package:city_guide/models/categories.dart';
 import 'package:city_guide/models/cities.dart';
 import 'package:city_guide/screens/authentication/screens/login_screen.dart';
 import 'package:city_guide/screens/authentication/screens/new_sign_up.dart';
+import 'package:city_guide/screens/city/screens/city_screen.dart';
 import 'package:city_guide/screens/rating/screens/rating_screen.dart';
 import 'package:city_guide/screens/unboarding/screens/onboarding_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -60,6 +62,12 @@ void main() async{
           transition: Transition.fade,
           transitionDuration: const Duration(milliseconds: 250)
         ),
+         GetPage(
+          name: '/CityScreen', 
+          page: ()=>  CityScreen(),
+          transition: Transition.fade,
+          transitionDuration: const Duration(milliseconds: 250)
+        ),
         GetPage(
           name: '/rating', 
           page: ()=> const RatingScreen(),
@@ -69,6 +77,12 @@ void main() async{
         GetPage(
           name: '/upload', 
           page: ()=> const UploadToFirestore(),
+          transition: Transition.fade,
+          transitionDuration: const Duration(milliseconds: 250)
+        ),
+         GetPage(
+          name: '/admin-main', 
+          page: ()=> const CreateCityScreen(),
           transition: Transition.fade,
           transitionDuration: const Duration(milliseconds: 250)
         ),

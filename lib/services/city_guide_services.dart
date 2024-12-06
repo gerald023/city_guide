@@ -1,6 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
+import 'dart:typed_data';
 import 'package:city_guide/models/cities.dart';
+import 'package:city_guide/services/cloudinary_upload_service.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:cloudinary_flutter/cloudinary_object.dart';
 import 'package:http/http.dart' as http;
@@ -180,74 +183,174 @@ void cloudService(){
       print(e);
     }
   }
+// Future<String?> createCategory({
 
-  Future<String?> createCity({
-    required String cityName,
-    required List<File> images,
-    required String category,
-    required String country,
-    required int rating
-  }) async{
-    try{
-      User? user = _auth.currentUser;
-       if (user == null) {
-        return 'User not logged in.';
-      }
+// })async{}
+  // Future<String?> createCity({
+  //   required String cityName,
+  //   required List<XFile> images,
+  //   required String category,
+  //   required String country,
+  //   required int rating,
+  //   required bool isPopular
+  // }) async{
+  //   print('reached the service class');
+  //   try{
+  //     User? user = _auth.currentUser;
+  //      if (user == null) {
+  //       return 'User not logged in.';
+  //     }
 
-      DocumentSnapshot userDoc = await _firestore.collection('Users').doc(user.uid).get();
+  //     DocumentSnapshot userDoc = await _firestore.collection('Users').doc(user.uid).get();
 
-      bool isAdmin = userDoc.get('admin') ?? false;
+  //     bool isAdmin = userDoc.get('admin') ?? false;
 
-      if (!isAdmin) {
-        return 'only admin can add cities';
-      }
+  //     if (!isAdmin) {
+  //       return 'only admin can add cities';
+  //     }
 
-      List<String> imagesUrls = [];
+  //     List<String> imagesUrls = [];
+      
 
-      for (File image in images) {
-        var request = http.MultipartRequest(
-          'POST',
-          Uri.parse('https://api.cloudinary.com/v1_1/dbjehxk0f/image/upload')
-        );
+  //     // for (XFile image in images) {
+  //     //   Uint8List imageData = await image.readAsBytes();
+  //     //   var request = http.MultipartRequest(
+  //     //     'POST',
+  //     //     Uri.parse('https://api.cloudinary.com/v1_1/dbjehxk0f/image/upload')
+  //     //   );
 
-        request.fields['upload_preset'] = 'dbjehxk0f';
+  //     //   request.fields['upload_preset'] = 'dbjehxk0f';
 
-        request.files.add(
-          await http.MultipartFile.fromPath('file', image.path)
-        );
+  //     //   request.files.add(
+  //     //     await http.MultipartFile.fromBytes(
+  //     //       'file', 
+  //     //       imageData,
+  //     //       filename: image.name
+  //     //       // image.path
+  //     //     )
+  //     //   );
 
-        var response = await request.send();
+  //     //   var response = await request.send();
 
-        if (response.statusCode == 200) {
-          var responseData = await response.stream.bytesToString();
-          var jsonData = json.decode(responseData);
-          imagesUrls.add(jsonData['secure_url']);
-        }else {
-          return 'Failed to upload image to Cloudinary';
-        }
+  //     //   if (response.statusCode == 200) {
+  //     //     var responseData = await response.stream.bytesToString();
+  //     //     var jsonData = json.decode(responseData);
+  //     //     imagesUrls.add(jsonData['secure_url']);
+  //     //   }else {
+  //     //     return 'Failed to upload image to Cloudinary';
+  //     //   }
 
-      String cityId = uuid.v4();
+  //     // String cityId = uuid.v4();
 
-      // create city
-      await _firestore.collection('Cities').doc(cityId).set({
-        'id':  cityId,
-        'cityName': cityName,
-        'category': category,
-        'country': country,
-        'rating': rating,
-        'images': imagesUrls,
-        'createdAt': FieldValue.serverTimestamp(),
-        'updatedAt': FieldValue.serverTimestamp(),
-      });
+  //     // final CollectionReference ref = FirebaseFirestore.instance.collection('place');
 
-      return null;
+  //     // await ref.doc(cityId).set({
+  //     //   'cityId':  cityId,
+  //     //   'cityName': cityName,
+  //     //   'category': category,
+  //     //   'country': country,
+  //     //   'rating': rating,
+  //     //   'images': imagesUrls,
+  //     //   'isPopular': isPopular,
+  //     //   'createdAt': FieldValue.serverTimestamp(),
+  //     //   'updatedAt': FieldValue.serverTimestamp(),
+  //     // });
+  //     // // create city
+  //     // await _firestore.collection('Cities').doc(cityId).set({
+  //     //   'id':  cityId,
+  //     //   'cityName': cityName,
+  //     //   'category': category,
+  //     //   'country': country,
+  //     //   'rating': rating,
+  //     //   'images': imagesUrls,
+  //     //   'isPopular': isPopular,
+  //     //   'createdAt': FieldValue.serverTimestamp(),
+  //     //   'updatedAt': FieldValue.serverTimestamp(),
+  //     // });
+  //     //   print('work done');
+  //     // return null;
 
-      }
-    }catch(e){
-      print('error creating city $e');
-      return 'An error occurred while creating the product. Please try again.';
+  //     // }
+  //   }catch(e){
+  //     print('error creating city $e');
+  //     return 'An error occurred while creating the product. Please try again.';
+  //   }
+  // }
+
+
+Future<String?> createCity({
+  required String cityName,
+  required List<XFile> images,
+  required String category,
+  required String country,
+  required int rating,
+  required bool isPopular,
+}) async {
+  print('Starting city creation process');
+  try {
+    User? user = _auth.currentUser;
+    if (user == null) {
+      print('User not logged in.');
+      return 'User not logged in.';
     }
+
+    print('Fetching user document...');
+    DocumentSnapshot userDoc = await _firestore.collection('Users').doc(user.uid).get();
+    bool isAdmin = userDoc.get('admin') ?? false;
+
+    print('User admin status: $isAdmin');
+    if (!isAdmin) {
+      return 'Only admin can add cities';
+    }
+
+    print('Uploading images...');
+    List<String> imagesUrls = [];
+    try {
+      // List<Future<String>> uploadTasks = [];
+final cloudinary_upload = CloudinaryUploadService();
+print(imagesUrls);
+for (XFile image in images) {
+  String? uploadUrl = await cloudinary_upload.uploadImageToCloudinary(image);
+  if (uploadUrl != null) {
+    print(uploadUrl);
+    imagesUrls.add(uploadUrl);
   }
+}
+print(imagesUrls);
+
+// Await all upload tasks
+// imagesUrls = await Future.wait(uploadTasks);
+
+
+      // Await all upload tasks
+      // imagesUrls = await Future.wait(uploadTasks);
+      print('Images uploaded successfully: $imagesUrls');
+    } catch (e) {
+      print('Image upload failed: $e');
+      return 'Failed to upload images.';
+    }
+
+    print('Creating city in Firestore...');
+    String cityId = const Uuid().v4();
+    await _firestore.collection('Cities').doc(cityId).set({
+      'id': cityId,
+      'cityName': cityName,
+      'category': category,
+      'country': country,
+      'rating': rating,
+      'images': imagesUrls,
+      'isPopular': isPopular,
+      'createdAt': FieldValue.serverTimestamp(),
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+
+    print('City created successfully!');
+    return null;
+  } catch (e) {
+    print('Error creating city: $e');
+    return 'An error occurred while creating the city. Please try again.';
+  }
+}
 
 
   Future<CitiesModel?> getCity(String cityId) async{
@@ -280,5 +383,13 @@ void cloudService(){
       print('Error while getting all cities $e');
       return [];
     } 
+  }
+
+  Future<void> addCityToFavorite(cityId) async{
+    try{
+
+    }catch(e){
+      print('error while making city favorite');
+    }
   }
 }
