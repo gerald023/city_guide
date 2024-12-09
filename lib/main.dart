@@ -16,6 +16,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:city_guide/main_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'admin1/admin_dashboard.dart';
+
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   final prefs = await SharedPreferences.getInstance();
@@ -82,7 +84,7 @@ void main() async{
         ),
          GetPage(
           name: '/admin-main', 
-          page: ()=> const CreateCityScreen(),
+          page: ()=> const AdminDashboard(),
           transition: Transition.fade,
           transitionDuration: const Duration(milliseconds: 250)
         ),
