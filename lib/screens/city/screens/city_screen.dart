@@ -9,6 +9,7 @@ import 'package:iconsax/iconsax.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../widgets/city_attraction_list.dart';
 import '../widgets/city_header_info.dart';
+import '../widgets/city_ratings.dart';
 
 
 
@@ -150,6 +151,8 @@ class _CityScreenState extends State<CityScreen> {
 
            const SizedBox(height: 20),
            SimilarCitiesWidget(),
+           const SizedBox(height: 30,),
+           const CityRatings()
           ],
         ),
         ),

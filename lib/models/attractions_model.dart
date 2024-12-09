@@ -2,29 +2,27 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class AttractionsModel{
   final String attractionId;
-  final String attractionListId;
+  final String category;
   final String name;
-  final String logo;
+  final String cityId;
+  final double lng;
+  final double lat;
   final List<String> images;
   final String description;
   final int rating;
-  final String location;
-  final DateTime openingTime;
-  final DateTime? closingTime;
   final DateTime createdAt;
   final DateTime updatedAt;
 
 
   AttractionsModel({
     required this.attractionId,
-    required this.attractionListId,
+    required this.category,
     required this.name,
-    required this.logo,
+    required this.cityId,
+    required this.lng,
+    required this.lat,
     required this.description,
     required this.images,
-    required this.location,
-    required this.openingTime,
-    this.closingTime,
     required this.rating,
     required this.createdAt,
     required this.updatedAt
@@ -34,15 +32,14 @@ class AttractionsModel{
   Map<String, dynamic> toMap(){
     return {
       'attractionId': attractionId,
-      'attractionListId': attractionListId,
+      'category': category,
       'name': name,
-      'logo': logo,
+      'cityId': cityId,
+      'longitude': lng,
+      'latitude': lat,
       'images': images,
       'rating': rating,
       'description': description,
-      'location': location,
-      'closingTime': closingTime,
-      'openingTime': openingTime,
       'createdAt': createdAt,
       'updatedAt': updatedAt
     };
@@ -52,14 +49,13 @@ class AttractionsModel{
   factory AttractionsModel.fromMap(Map<String, dynamic> map){
     return AttractionsModel(
       attractionId: map['attractionId'] ?? '', 
-      attractionListId: map['attractionListId'] ?? '', 
+      category: map['category'] ?? '', 
       name: map['name'] ?? '', 
-      logo: map['logo'] ?? '', 
+      cityId: map['cityId'] ?? '', 
+      lng: map['longitude'] ?? 0.0,
+      lat: map['latitude'] ?? 0.0,
       description: map['description'] ?? '', 
       images: List<String>.from(map['images'] ?? []), 
-      location: map['location'] ?? '', 
-      openingTime: (map['openingTIme'] as Timestamp).toDate(),
-      closingTime: (map['openingTIme'] as Timestamp).toDate(), 
       rating: map['rating'] ?? 0, 
       createdAt: (map['openingTIme'] as Timestamp).toDate(),
       updatedAt: (map['openingTIme'] as Timestamp).toDate()
