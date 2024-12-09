@@ -1,3 +1,4 @@
+import 'package:city_guide/admin/attractions/screens/add_attraction_list.dart';
 import 'package:city_guide/admin/city/screen/create_city_screen.dart';
 import 'package:city_guide/firebase_options.dart';
 import 'package:city_guide/models/categories.dart';
@@ -85,6 +86,12 @@ void main() async{
          GetPage(
           name: '/admin-main', 
           page: ()=> const AdminDashboard(),
+          transition: Transition.fade,
+          transitionDuration: const Duration(milliseconds: 250)
+        ),
+          GetPage(
+          name: '/add-attraction', 
+          page: ()=>  AddAttractionList(),
           transition: Transition.fade,
           transitionDuration: const Duration(milliseconds: 250)
         ),

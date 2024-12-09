@@ -345,7 +345,7 @@ print(imagesUrls);
     });
 
     print('City created successfully!');
-    return null;
+    return cityId;
   } catch (e) {
     print('Error creating city: $e');
     return 'An error occurred while creating the city. Please try again.';
@@ -392,4 +392,6 @@ print(imagesUrls);
       print('error while making city favorite');
     }
   }
+
+
 }

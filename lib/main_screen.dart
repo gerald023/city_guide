@@ -1,3 +1,5 @@
+import 'package:city_guide/admin/attractions/screens/add_attraction_list.dart';
+import 'package:city_guide/admin/attractions/screens/findLocation.dart';
 import 'package:city_guide/main.dart';
 import 'package:city_guide/screens/account/screens/account_screen.dart';
 import 'package:city_guide/screens/explore/screens/explore_screen.dart';
@@ -19,12 +21,13 @@ class _MainScreenState extends State<MainScreen> {
   int activeIndex = 0;
    final List<Widget> _pages = [
     const HomeScreen(),
-    const OnboardingScreen(),
+    AddAttractionList(),
+    //  MapScreen(),
     const NewExplore(),
     // const ExploreScreen(),
      const ProfileScreen(),
     //  LoginScreen(),
-    const UploadToFirestore(),
+     MapScreen(),
     
   ];
   final PageController _pageController = PageController();

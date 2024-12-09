@@ -4,7 +4,9 @@ import 'package:city_guide/components/custom_button.dart';
 import 'package:city_guide/components/textField_widget.dart';
 import 'package:city_guide/services/city_guide_services.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateCityScreen extends StatefulWidget {
   const CreateCityScreen({super.key});
@@ -56,7 +58,7 @@ class _CreateCityScreenState extends State<CreateCityScreen> {
     });
       try{
         
-      await cityService.createCity(
+      String? cityId = await cityService.createCity(
         cityName: _cityName.text, 
         images: _selectedImages, 
         category: _selectedCategory, 
@@ -70,7 +72,8 @@ class _CreateCityScreenState extends State<CreateCityScreen> {
        ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text("City added successfully!")),
         );
-
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setString('cityId', cityId!);
         _formKey.currentState!.reset();
          setState(() {
           _selectedImages = [];
@@ -78,6 +81,7 @@ class _CreateCityScreenState extends State<CreateCityScreen> {
           _isCityPopular = false;
           _isLoading = false;
         });
+        Get.toNamed('/add-attraction');
       }catch(e){
         setState(() {
       _isLoading = true;
@@ -191,14 +195,7 @@ class _CreateCityScreenState extends State<CreateCityScreen> {
                   },
                 ),
                    const SizedBox(height: 20,),
-                 TextButton.icon(
-                  onPressed: _pickedImages,
-                  icon: const Icon(Icons.add_a_photo),
-                  label: const Text("Pick Images"),
-                  style: const ButtonStyle(
-                    backgroundColor: WidgetStateColor.transparent,
-                  ),
-                ),
+                 Port Harcourt Pleasure Park is a public recreation park in Niger-Delta's oil rich garden city of Port Harcourt, Rivers State, Nigeria. It is strategically located along the major Aba Road, and flanked between the Army Barracks and Air Force base junction, on an expansive open land with 24-7-365 internal security
                 const SizedBox(height: 20,),
                         Wrap(
   spacing: 8.0,

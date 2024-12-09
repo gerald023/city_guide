@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:city_guide/models/attraction_list_model.dart';
 import 'package:city_guide/models/cities.dart';
 import 'package:city_guide/services/city_guide_services.dart';
+import 'package:city_guide/services/cloudinary_upload_service.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
 import 'package:cloudinary_flutter/cloudinary_object.dart';
 import 'package:http/http.dart' as http;
@@ -49,15 +51,14 @@ Future<void> createAttractionList(AttractionListModel attractionList) async{
 
 Future<String?> createAttraction({
   // required String attractionId,
-  required String attractionListId,
+  required String category,
   required String name,
-  required List<File> images,
+  required List<XFile> images,
   required String description,
-  required String logo,
-  required String location,
+  required String cityId,
+  required double lat,
+  required double lng,
   required int rating,
-  required DateTime openingTIme,
-  DateTime? closingTime,
 }) async{
   try{
      User? user = _auth.currentUser;
@@ -74,47 +75,39 @@ Future<String?> createAttraction({
       }
 
       List<String> imagesUrls = [];
-      for (File image in images) {
-        var request = http.MultipartRequest(
-          'POST',
-          Uri.parse('https://api.cloudinary.com/v1_1/dbjehxk0f/image/upload')
-        );
-        request.fields['upload_preset'] = 'dbjehxk0f';
-         request.files.add(
-          await http.MultipartFile.fromPath('file', image.path)
-        );
+     try{
+      final cloudinary_upload = CloudinaryUploadService();
+       for (XFile image in images) {
+        String? uploadUrl = await cloudinary_upload.uploadImageToCloudinary(image);
 
-        var response = await request.send();
-        if (response.statusCode == 200) {
-          var responseData = await response.stream.bytesToString();
-          var jsonData = json.decode(responseData);
-          imagesUrls.add(jsonData['secure_url']);
-        }else {
-          return 'Failed to upload image to Cloudinary';
+        if (uploadUrl != null) {
+          imagesUrls.add(uploadUrl);
         }
-
+        print(imagesUrls);
         String attractionId = uuid.v4();
         
         await _firestore.collection('Attractions').doc(attractionId).set({
           'attractionId': attractionId,
-          'attractionListId': attractionListId,
+          'category': category,
           'name': name,
           'rating': rating,
-          'location': location,
           'images': imagesUrls,
-          'logo': logo,
+          'cityId': cityId,
+          'longitude': lng,
+          'latitude': lat,
           'description': description,
-          'openingTime': openingTIme,
-          'closingTime': closingTime,
           'createdAt': FieldValue.serverTimestamp(),
           'updatedAt': FieldValue.serverTimestamp(),
         });
 
-        await _firestore .collection('AttractionList').doc(attractionListId).update({
-          'attractions': FieldValue.arrayUnion([attractionId]),
-        });
+        // await _firestore .collection('AttractionList').doc(attractionListId).update({
+        //   'attractions': FieldValue.arrayUnion([attractionId]),
+        // });
 
       }
+     }catch(e){
+      print('image upload failed $e');
+     }
 
   }catch(e){
     print(e);
