@@ -21,7 +21,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
     const DashboardOverview(),
     const CreateCityScreen(),
     AddAttractionList(),
-    const CreateCityScreen()
   ];
 
   @override
@@ -62,10 +61,6 @@ class _AdminDashboardState extends State<AdminDashboard> {
             ListTile(
               title: const Text('Add Attraction'),
               onTap: () => setState(() => _currentIndex = 2),
-            ),
-            ListTile(
-              title: const Text('Manage Notifications'),
-              onTap: () => setState(() => _currentIndex = 3),
             ),
           ],
         ),

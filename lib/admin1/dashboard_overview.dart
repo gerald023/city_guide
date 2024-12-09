@@ -33,7 +33,35 @@ class DashboardOverview extends StatelessWidget {
             ),
             const SizedBox(height: 24),
 
-            // Top-Rated Attractions Section (Dynamic)
+            // Chart Section
+            Card(
+              elevation: 4,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    const Text(
+                      'Monthly Visitors',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    // Replace with your actual chart
+                    Container(
+                      height: 200,
+                      color: Colors.green[100],
+                      child: const Center(
+                        child: Text('Chart Placeholder'),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            const SizedBox(height: 24),
+
             Card(
               elevation: 4,
               child: Padding(
@@ -95,67 +123,6 @@ class DashboardOverview extends StatelessWidget {
                           },
                         );
                       },
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Chart Section
-            Card(
-              elevation: 4,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  children: [
-                    const Text(
-                      'Monthly Visitors',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    // Replace with your actual chart
-                    Container(
-                      height: 200,
-                      color: Colors.green[100],
-                      child: const Center(
-                        child: Text('Chart Placeholder'),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            const SizedBox(height: 24),
-
-            // Attraction Highlights Section
-            Card(
-              elevation: 4,
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Top-Rated Attractions',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
-                    _buildAttractionCard(
-                      'City Museum',
-                      '4.9',
-                      Icons.museum,
-                    ),
-                    _buildAttractionCard(
-                      'Grand Park',
-                      '4.8',
-                      Icons.park,
                     ),
                   ],
                 ),
@@ -252,3 +219,5 @@ class DashboardOverview extends StatelessWidget {
     );
   }
 }
+
+
