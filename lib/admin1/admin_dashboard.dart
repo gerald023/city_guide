@@ -1,3 +1,5 @@
+import 'package:city_guide/admin/attractions/screens/add_attraction_list.dart';
+import 'package:city_guide/admin/city/screen/create_city_screen.dart';
 import 'package:flutter/material.dart';
 
 import 'dashboard_overview.dart';
@@ -17,9 +19,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   final List<Widget> _pages = [
     const DashboardOverview(),
-    ManageAttractions(),
-    const ManageReviews(),
-    const ManageNotifications(),
+    const CreateCityScreen(),
+    AddAttractionList(),
+    const CreateCityScreen()
   ];
 
   @override
@@ -27,7 +29,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     return Scaffold(
       backgroundColor: const Color(0xff579f8c),
       appBar: AppBar(
-        title: const Text('... DashBoard ...'),
+        title: const Text('Welcome, admin'),
         actions: [
           IconButton(
             icon: const Icon(Icons.logout),
@@ -54,11 +56,11 @@ class _AdminDashboardState extends State<AdminDashboard> {
               onTap: () => setState(() => _currentIndex = 0),
             ),
             ListTile(
-              title: const Text('Manage Attractions'),
+              title: const Text('Create City'),
               onTap: () => setState(() => _currentIndex = 1),
             ),
             ListTile(
-              title: const Text('Manage Reviews'),
+              title: const Text('Add Attraction'),
               onTap: () => setState(() => _currentIndex = 2),
             ),
             ListTile(

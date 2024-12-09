@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:chart_sparkline/chart_sparkline.dart';
 
 class DashboardOverview extends StatelessWidget {
   const DashboardOverview({super.key});

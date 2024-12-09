@@ -195,7 +195,6 @@ class _CreateCityScreenState extends State<CreateCityScreen> {
                   },
                 ),
                    const SizedBox(height: 20,),
-                 Port Harcourt Pleasure Park is a public recreation park in Niger-Delta's oil rich garden city of Port Harcourt, Rivers State, Nigeria. It is strategically located along the major Aba Road, and flanked between the Army Barracks and Air Force base junction, on an expansive open land with 24-7-365 internal security
                 const SizedBox(height: 20,),
                         Wrap(
   spacing: 8.0,
